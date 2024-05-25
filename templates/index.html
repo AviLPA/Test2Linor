@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload a Video</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="videoInput" name="video" accept="video/mp4,video/quicktime">
+            <button type="button" onclick="uploadVideo()">Upload</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function uploadVideo() {
+            const form = document.getElementById('uploadForm');
+            const formData = new FormData(form);
+            const resultDiv = document.getElementById('result');
+
+            resultDiv.textContent = 'Processing...';
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                resultDiv.textContent = `Result: ${result.message}`;
+            } catch (error) {
+                resultDiv.textContent = 'Error processing video';
+            }
+        }
+    </script>
+</body>
+</html>
